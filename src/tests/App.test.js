@@ -78,7 +78,28 @@ describe('Testes do componente <App.js />', () => {
       userEvent.click(screen.getByRole('link', { name: 'About' }));
       expect(history.location.pathname).toBe('/about');
     });
-    test.todo('(4) ao clicar no link "Favorite Pokémons" a plicação deve redirecionar para a página de pokemons favoritados "/favorites".');
+    test('(4) ao clicar no link "Favorite Pokémons" a plicação deve redirecionar para a página de pokemons favoritados "/favorites".', () => {
+      const { history } = renderWithRouter(<App />);
+
+      // navegando da pagina home para a favorites
+      userEvent.click(screen.getByRole('link', { name: 'Favorite Pokémons' }));
+      expect(history.location.pathname).toBe('/favorites');
+
+      // navegando da pagina about para a pagina favorites
+      history.push('/about');
+      userEvent.click(screen.getByRole('link', { name: 'Favorite Pokémons' }));
+      expect(history.location.pathname).toBe('/favorites');
+
+      // navegando da pagina NotFound para a pagina favorites
+      history.push('/PaginaNotFound');
+      userEvent.click(screen.getByRole('link', { name: 'Favorite Pokémons' }));
+      expect(history.location.pathname).toBe('/favorites');
+
+      // navegando da pagina favorites para a propria pagina favorites
+      history.push('/favorites');
+      userEvent.click(screen.getByRole('link', { name: 'Favorite Pokémons' }));
+      expect(history.location.pathname).toBe('/favorites');
+    });
   });
 
   describe('Not Found', () => {
