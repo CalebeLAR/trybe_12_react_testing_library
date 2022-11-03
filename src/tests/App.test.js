@@ -1,5 +1,6 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
 
@@ -33,30 +34,46 @@ describe('Testes do componente <App.js />', () => {
   });
 
   describe('Click nos links de navegação', () => {
-    test('(2) ao clicar no link "Home" a plicação deve redirecionar para a página principal "/".', () => {
+    test('(2) ao clicar no link "Home" a plicação deve redirecionar para a página principal "/".', async () => {
       const { history } = renderWithRouter(<App />);
 
       // navegando da página about para a home
-      history.push('/about');
+      act(() => {
+        history.push('/about');
+      });
+
+      expect(await screen.findByRole('heading', { name: 'About Pokédex', level: 2 })).toBeVisible();
       userEvent.click(screen.getByRole('link', { name: 'Home' }));
       expect(history.location.pathname).toBe('/');
 
       // navegando da página favorite pokemon para a home
-      history.push('/favorites');
+      act(() => {
+        history.push('/favorites');
+      });
+
+      expect(await screen.findByRole('heading', { name: 'Favorite pokémons', level: 2 })).toBeVisible();
       userEvent.click(screen.getByRole('link', { name: 'Home' }));
       expect(history.location.pathname).toBe('/');
 
       // navegando da página NotFound pokemon para a home
-      history.push('/PaginaNotFound');
+      act(() => {
+        history.push('/PaginaNotFound');
+      });
+
+      expect(await screen.findByRole('heading', { name: 'Page requested not found', level: 2 })).toBeVisible();
       userEvent.click(screen.getByRole('link', { name: 'Home' }));
       expect(history.location.pathname).toBe('/');
 
       // navegando da página home pokemon para propria a home
-      history.push('/');
+      act(() => {
+        history.push('/');
+      });
+
+      expect(await screen.findByRole('heading', { name: 'Encountered pokémons', level: 2 }));
       userEvent.click(screen.getByRole('link', { name: 'Home' }));
       expect(history.location.pathname).toBe('/');
     });
-    test('(3) ao clicar no link "About" a plicação deve redirecionar para a página principal "/about".', () => {
+    test('(3) ao clicar no link "About" a plicação deve redirecionar para a página principal "/about".', async () => {
       const { history } = renderWithRouter(<App />);
 
       // navegando da pagina home para a about
@@ -64,21 +81,30 @@ describe('Testes do componente <App.js />', () => {
       expect(history.location.pathname).toBe('/about');
 
       // navegando da pagina favorite para a pagina about
-      history.push('/favorites');
+      act(() => {
+        history.push('/favorites');
+      });
+      expect(await screen.findByRole('heading', { name: 'Favorite pokémons', level: 2 })).toBeVisible();
       userEvent.click(screen.getByRole('link', { name: 'About' }));
       expect(history.location.pathname).toBe('/about');
 
       // navegando da pagina NotFound para a pagina about
-      history.push('/PaginaNotFound');
+      act(() => {
+        history.push('/PaginaNotFound');
+      });
+      expect(await screen.findByRole('heading', { name: 'Page requested not found', level: 2 })).toBeVisible();
       userEvent.click(screen.getByRole('link', { name: 'About' }));
       expect(history.location.pathname).toBe('/about');
 
       // navegando da pagina about para a propria pagina about
-      history.push('/about');
+      act(() => {
+        history.push('/about');
+      });
+      expect(await screen.findByRole('heading', { name: 'About Pokédex', level: 2 })).toBeVisible();
       userEvent.click(screen.getByRole('link', { name: 'About' }));
       expect(history.location.pathname).toBe('/about');
     });
-    test('(4) ao clicar no link "Favorite Pokémons" a plicação deve redirecionar para a página de pokemons favoritados "/favorites".', () => {
+    test('(4) ao clicar no link "Favorite Pokémons" a plicação deve redirecionar para a página de pokemons favoritados "/favorites".', async () => {
       const { history } = renderWithRouter(<App />);
 
       // navegando da pagina home para a favorites
@@ -86,23 +112,43 @@ describe('Testes do componente <App.js />', () => {
       expect(history.location.pathname).toBe('/favorites');
 
       // navegando da pagina about para a pagina favorites
-      history.push('/about');
+      act(() => {
+        history.push('/about');
+      });
+      expect(await screen.findByRole('heading', { name: 'About Pokédex', level: 2 })).toBeVisible();
       userEvent.click(screen.getByRole('link', { name: 'Favorite Pokémons' }));
       expect(history.location.pathname).toBe('/favorites');
 
       // navegando da pagina NotFound para a pagina favorites
-      history.push('/PaginaNotFound');
+      act(() => {
+        history.push('/PaginaNotFound');
+      });
+      expect(await screen.findByRole('heading', { name: 'Page requested not found', level: 2 })).toBeVisible();
       userEvent.click(screen.getByRole('link', { name: 'Favorite Pokémons' }));
       expect(history.location.pathname).toBe('/favorites');
 
       // navegando da pagina favorites para a propria pagina favorites
-      history.push('/favorites');
+      act(() => {
+        history.push('/favorites');
+      });
+      expect(await screen.findByRole('heading', { name: 'Favorite pokémons' })).toBeVisible();
       userEvent.click(screen.getByRole('link', { name: 'Favorite Pokémons' }));
       expect(history.location.pathname).toBe('/favorites');
     });
   });
 
-  describe('Not Found', () => {
-    test.todo('(5) a aplicação redireciona para a página notFound caso a URL seja desconhecida.');
+  describe('NotFound', () => {
+    test('(5) a aplicação redireciona para a página notFound caso a URL seja desconhecida.', async () => {
+      const { history } = renderWithRouter(<App />);
+      act(() => {
+        history.push('/PaginaNotFound');
+      });
+      const mainTitleNotFound = await screen.findByRole('heading', { name: 'Page requested not found' });
+      expect(mainTitleNotFound).toBeVisible();
+      const imgSadPikachu = screen.getByRole('img');
+      expect(imgSadPikachu).toHaveAttribute('src', 'https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif');
+      expect(imgSadPikachu).toHaveAttribute('alt', 'Pikachu crying because the page requested was not found');
+      expect(imgSadPikachu).toBeVisible();
+    });
   });
 });
