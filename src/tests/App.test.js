@@ -31,6 +31,7 @@ describe('Testes do componente <App.js />', () => {
       expect(linkFavoritePokémons).toBeVisible();
     });
   });
+
   describe('Click nos links de navegação', () => {
     test('(2) ao clicar no link "Home" a plicação deve redirecionar para a página principal "/".', () => {
       const { history } = renderWithRouter(<App />);
@@ -46,13 +47,40 @@ describe('Testes do componente <App.js />', () => {
       expect(history.location.pathname).toBe('/');
 
       // navegando da página NotFound pokemon para a home
-      history.push('/PaginaNotFund');
+      history.push('/PaginaNotFound');
+      userEvent.click(screen.getByRole('link', { name: 'Home' }));
+      expect(history.location.pathname).toBe('/');
+
+      // navegando da página home pokemon para propria a home
+      history.push('/');
       userEvent.click(screen.getByRole('link', { name: 'Home' }));
       expect(history.location.pathname).toBe('/');
     });
-    test.todo('(3) ao clicar no link "About" a plicação deve redirecionar para a página principal "/about".');
+    test('(3) ao clicar no link "About" a plicação deve redirecionar para a página principal "/about".', () => {
+      const { history } = renderWithRouter(<App />);
+
+      // navegando da pagina home para a about
+      userEvent.click(screen.getByRole('link', { name: 'About' }));
+      expect(history.location.pathname).toBe('/about');
+
+      // navegando da pagina favorite para a pagina about
+      history.push('/favorites');
+      userEvent.click(screen.getByRole('link', { name: 'About' }));
+      expect(history.location.pathname).toBe('/about');
+
+      // navegando da pagina NotFound para a pagina about
+      history.push('/PaginaNotFound');
+      userEvent.click(screen.getByRole('link', { name: 'About' }));
+      expect(history.location.pathname).toBe('/about');
+
+      // navegando da pagina about para a propria pagina about
+      history.push('/about');
+      userEvent.click(screen.getByRole('link', { name: 'About' }));
+      expect(history.location.pathname).toBe('/about');
+    });
     test.todo('(4) ao clicar no link "Favorite Pokémons" a plicação deve redirecionar para a página de pokemons favoritados "/favorites".');
   });
+
   describe('Not Found', () => {
     test.todo('(5) a aplicação redireciona para a página notFound caso a URL seja desconhecida.');
   });
