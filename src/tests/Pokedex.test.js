@@ -13,8 +13,12 @@ describe('#Pokedex', () => {
       expect(headingPokedex).toBeVisible();
     });
   });
-  describe('Testes para a exibição dos pokémons da lista quando o botão "Próximo pokémon" é clicado', () => {
-    test.todo('o botão deve conter o texto "Próximo pokémon".');
+  describe('Testes para a exibição dos pokémons da lista, quando o botão "Próximo pokémon" é clicado', () => {
+    test.only('o botão deve conter o texto "Próximo pokémon".', () => {
+      const btnNextPokemon = screen.getByTestId('next-pokemon');
+      expect(btnNextPokemon).toHaveTextContent('Próximo pokémon');
+      expect(btnNextPokemon).toBeVisible();
+    });
     test.todo('os próximos pokémons da lista devem ser mostrados, um a um, ao clicar sucessivamente no botão.');
     test.todo('o primeiro pokémon da lista deve ser mostrado ao clicar no botão, se estiver no último pokémon da lista.');
     test.todo('deve ser mostrado apenas um pokémon por vez.');
