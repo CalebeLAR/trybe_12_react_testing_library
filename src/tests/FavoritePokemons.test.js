@@ -21,7 +21,7 @@ describe('Testes do componente <FavoritePokemons />', () => {
     const btnMoreDetails = screen.getByRole('link', { name: 'More details' });
     userEvent.click(btnMoreDetails);
 
-    // perta no pokém
+    // perta no pokémon
     const btnFav = await screen.findByLabelText('Pokémon favoritado?');
     userEvent.click(btnFav);
 
