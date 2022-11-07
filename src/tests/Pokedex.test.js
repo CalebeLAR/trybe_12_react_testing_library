@@ -1,6 +1,7 @@
-import { screen } from '@testing-library/react';
+import { findByTestId, findByText, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
-// import userEvent from '@testing-library/user-event';
+import pokemons from '../data';
 import App from '../App';
 
 describe('#Pokedex', () => {
@@ -14,12 +15,27 @@ describe('#Pokedex', () => {
     });
   });
   describe('Testes para a exibição dos pokémons da lista, quando o botão "Próximo pokémon" é clicado', () => {
-    test.only('o botão deve conter o texto "Próximo pokémon".', () => {
+    test('o botão deve conter o texto "Próximo pokémon".', () => {
       const btnNextPokemon = screen.getByTestId('next-pokemon');
       expect(btnNextPokemon).toHaveTextContent('Próximo pokémon');
       expect(btnNextPokemon).toBeVisible();
     });
-    test.todo('os próximos pokémons da lista devem ser mostrados, um a um, ao clicar sucessivamente no botão.');
+    test('os próximos pokémons da lista devem ser mostrados, um a um, ao clicar sucessivamente no botão.', async () => {
+      // primeiro pokemón
+      const firstPokemonName = screen.getByTestId('pokemon-name');
+      expect(firstPokemonName).toHaveTextContent('Pikachu');
+      expect(firstPokemonName).toBeVisible();
+
+      userEvent.click(screen.getByTestId('next-pokemon'));
+
+      // segundo pokémon
+      const secondPokemonName = await screen.findByTestId('pokemon-name');
+      expect(secondPokemonName).toHaveTextContent('Charmander');
+      expect(secondPokemonName).toBeVisible();
+
+      // verificando se o segundo pokémon não está mais no documento
+      expect(screen.queryByText('Pikachu')).not.toBeInTheDocument();
+    });
     test.todo('o primeiro pokémon da lista deve ser mostrado ao clicar no botão, se estiver no último pokémon da lista.');
     test.todo('deve ser mostrado apenas um pokémon por vez.');
   });
