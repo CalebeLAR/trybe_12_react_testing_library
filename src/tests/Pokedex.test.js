@@ -65,7 +65,16 @@ describe('#Pokedex', () => {
       expect(getPokemonTypeByTestId()).toHaveTextContent('Electric');
       expect(getPokemonWeightByTestId()).toHaveTextContent('Average weight: 6.0 kg');
     });
-    test.todo('5) deve ser mostrado apenas um pokémon por vez.');
+    test('5) deve ser mostrado apenas um pokémon por vez.', async () => {
+      // a plicação carrega apenas uma imagem para cada pokemón carregado,
+      // isso significa que para cada click no botão de ser rederizada na tela apenas UM sprite de pokemon por vez'
+      const firstSpritesOnScreen = screen.getAllByAltText(/sprite/i);
+      expect(firstSpritesOnScreen).toHaveLength(1);
+      userEvent.click(getButtonNext());
+
+      const secondSpritesOnScreen = await screen.findAllByAltText(/sprite/i);
+      expect(secondSpritesOnScreen).toHaveLength(1);
+    });
   });
   describe('Testes para os botões que filtram os pokemóns da Pokédex pelo tipo.', () => {
     test.todo('deve existir um botão de filtragem para cada tipo de pokémon, sem repetição');
