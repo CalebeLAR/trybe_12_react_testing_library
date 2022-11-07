@@ -3,28 +3,31 @@ import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
 
+// para não ficar repetindo sempre os mesmos metchers do RTL eu resolví refatorar esse código assim.
+const getPokemonNameByTestId = () => screen.getByTestId('pokemon-name');
+const getPokemonTypeByTestId = () => screen.getByTestId('pokemon-type');
+const getPokemonWeightByTestId = () => screen.getByTestId('pokemon-weight');
+const findPokemonNameByTestId = async () => screen.findByTestId('pokemon-name');
+
 describe('#Pokedex', () => {
   beforeEach(() => {
     renderWithRouter(<App />);
   });
   const getButtonNext = () => screen.getByTestId('next-pokemon');
 
-  describe('Testes para a janela de exibição dos pokemóns.', () => {
-    test('a página deve conter um heading h2 com o texto Encountered pokémons', () => {
+  describe('Testes para os componentes da janela de exibição dos pokemóns.', () => {
+    test('1) a página deve conter um heading h2 com o texto Encountered pokémons', () => {
       const headingPokedex = screen.getByRole('heading', { name: 'Encountered pokémons', level: 2 });
       expect(headingPokedex).toBeVisible();
     });
-    test('a página deve conter o texto "Próximo pokémon".', () => {
+    test('2) a página deve conter o texto "Próximo pokémon".', () => {
       const btnNextPokemon = getButtonNext();
       expect(btnNextPokemon).toHaveTextContent('Próximo pokémon');
       expect(btnNextPokemon).toBeVisible();
     });
   });
   describe('Testes para a exibição dos pokémons da lista, quando o botão "Próximo pokémon" é clicado', () => {
-    const getPokemonNameByTestId = () => screen.getByTestId('pokemon-name');
-    const findPokemonNameByTestId = async () => screen.findByTestId('pokemon-name');
-
-    test('os próximos pokémons da lista devem ser mostrados, um a um, ao clicar sucessivamente no botão.', async () => {
+    test('3) os próximos pokémons da lista devem ser mostrados, um a um, ao clicar sucessivamente no botão.', async () => {
       // primeiro pokemón
       const firstPokemonName = getPokemonNameByTestId();
       expect(firstPokemonName).toHaveTextContent('Pikachu');
@@ -40,35 +43,29 @@ describe('#Pokedex', () => {
       // verificando se o segundo pokémon não está mais no documento
       expect(screen.queryByText('Pikachu')).not.toBeInTheDocument();
     });
-    test('o primeiro pokémon da lista deve ser mostrado ao clicar no botão, se estiver no último pokémon da lista.', async () => {
+    test('4) o primeiro pokémon da lista deve ser mostrado ao clicar no botão, se estiver no último pokémon da lista.', async () => {
       // verificando qual é o primeiro pokemón (Pikachu)
-      const firstPokemonName = getPokemonNameByTestId();
-      const firstPokemonType = screen.getByTestId('pokemon-type');
-      const firstPokemonWeight = screen.getByTestId('pokemon-weight');
-      expect(firstPokemonName).toHaveTextContent('Pikachu');
-      expect(firstPokemonType).toHaveTextContent('Electric');
-      expect(firstPokemonWeight).toHaveTextContent('Average weight: 6.0 kg');
+      expect(getPokemonNameByTestId()).toHaveTextContent('Pikachu');
+      expect(getPokemonTypeByTestId()).toHaveTextContent('Electric');
+      expect(getPokemonWeightByTestId()).toHaveTextContent('Average weight: 6.0 kg');
 
       // clicando até chegar no ultimo pokémon
-      const btnNextPokemon = screen.getByTestId('next-pokemon');
-      userEvent.click(btnNextPokemon); // 2 charmander
-      userEvent.click(btnNextPokemon); // 3 Caterpie
-      userEvent.click(btnNextPokemon); // 4 Ekans
-      userEvent.click(btnNextPokemon); // 5 Alakazam
-      userEvent.click(btnNextPokemon); // 6 Mew
-      userEvent.click(btnNextPokemon); // 7 Rapidash
-      userEvent.click(btnNextPokemon); // 8 Snorlax
-      userEvent.click(btnNextPokemon); // 9 Dragonair
+      userEvent.click(getButtonNext()); // 2 charmander
+      userEvent.click(getButtonNext()); // 3 Caterpie
+      userEvent.click(getButtonNext()); // 4 Ekans
+      userEvent.click(getButtonNext()); // 5 Alakazam
+      userEvent.click(getButtonNext()); // 6 Mew
+      userEvent.click(getButtonNext()); // 7 Rapidash
+      userEvent.click(getButtonNext()); // 8 Snorlax
+      userEvent.click(getButtonNext()); // 9 Dragonair
+      userEvent.click(getButtonNext()); // 1 pikachu
 
-      userEvent.click(btnNextPokemon); // 1 pikachu
-      const pokemonName = await findPokemonNameByTestId();
-      const pokemonType = screen.getByTestId('pokemon-type');
-      const pokemonWeight = screen.getByTestId('pokemon-weight');
-      expect(pokemonName).toHaveTextContent('Pikachu');
-      expect(pokemonType).toHaveTextContent('Electric');
-      expect(pokemonWeight).toHaveTextContent('Average weight: 6.0 kg');
+      // verificando se retorna ao primeiro  pokemón (Pikachu)
+      expect(getPokemonNameByTestId()).toHaveTextContent('Pikachu');
+      expect(getPokemonTypeByTestId()).toHaveTextContent('Electric');
+      expect(getPokemonWeightByTestId()).toHaveTextContent('Average weight: 6.0 kg');
     });
-    test.todo('deve ser mostrado apenas um pokémon por vez.');
+    test.todo('5) deve ser mostrado apenas um pokémon por vez.');
   });
   describe('Testes para os botões que filtram os pokemóns da Pokédex pelo tipo.', () => {
     test.todo('deve existir um botão de filtragem para cada tipo de pokémon, sem repetição');
