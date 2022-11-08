@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { findByAltText, findByTestId, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
@@ -8,8 +8,10 @@ import pokemons from '../data';
 const getPokemonNameByTestId = () => screen.getByTestId('pokemon-name');
 const getPokemonTypeByTestId = () => screen.getByTestId('pokemon-type');
 const getPokemonWeightByTestId = () => screen.getByTestId('pokemon-weight');
-const findPokemonNameByTestId = async () => screen.findByTestId('pokemon-name');
 const getButtonNext = () => screen.getByTestId('next-pokemon');
+const getButtonByType = (typePokemon) => screen.getByText('next-pokemon');
+const findPokemonNameByTestId = async () => screen.findByTestId('pokemon-name');
+const findPokemonTypeByTestId = async () => screen.findByTestId('pokemon-type');
 
 describe('#Pokedex', () => {
   beforeEach(() => {
@@ -89,7 +91,22 @@ describe('#Pokedex', () => {
       expect(typePokemonsButtons[5]).toHaveTextContent('Normal');
       expect(typePokemonsButtons[6]).toHaveTextContent('Dragon');
     });
-    test.todo('7) a partir da seleção de um botão de tipo, a Pokédex deve circular somente pelos pokémons daquele tipo.');
+    test('7) a partir da seleção de um botão de tipo, a Pokédex deve circular somente pelos pokémons daquele tipo.', async () => {
+      // são 7 botões ao todo. quado a aplicação inicia, a pokedex exibe todos os tipos de pokemons
+      const typePokemonsButtons = screen.getAllByTestId('pokemon-type-button');
+      typePokemonsButtons.forEach(async (button) => {
+        await screen.findByTestId('pokemon-name');
+        userEvent.click(button);
+        const curr = screen.queryByText('Próximo pokémon');
+        const isDisable = !curr.disabled;
+        if (isDisable) {
+          expect(getPokemonTypeByTestId()).toHaveTextContent(button.textContent);
+          userEvent.click(getButtonNext());
+          expect(getPokemonTypeByTestId()).toHaveTextContent(button.textContent);
+        }
+        expect(getPokemonTypeByTestId()).toHaveTextContent(button.textContent);
+      });
+    });
     test.todo('8) o texto do botão deve corresponder ao nome do tipo, ex. Psychic.');
     test.todo('9) o botão All precisa estar sempre visível.');
   });
