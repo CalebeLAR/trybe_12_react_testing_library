@@ -2,18 +2,19 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
+import pokemons from '../data';
 
 // para não ficar repetindo sempre os mesmos metchers do RTL eu resolví refatorar esse código assim.
 const getPokemonNameByTestId = () => screen.getByTestId('pokemon-name');
 const getPokemonTypeByTestId = () => screen.getByTestId('pokemon-type');
 const getPokemonWeightByTestId = () => screen.getByTestId('pokemon-weight');
 const findPokemonNameByTestId = async () => screen.findByTestId('pokemon-name');
+const getButtonNext = () => screen.getByTestId('next-pokemon');
 
 describe('#Pokedex', () => {
   beforeEach(() => {
     renderWithRouter(<App />);
   });
-  const getButtonNext = () => screen.getByTestId('next-pokemon');
 
   describe('Testes para os componentes da janela de exibição dos pokemóns.', () => {
     test('1) a página deve conter um heading h2 com o texto Encountered pokémons', () => {
@@ -61,13 +62,13 @@ describe('#Pokedex', () => {
       userEvent.click(getButtonNext()); // 1 pikachu
 
       // verificando se retorna ao primeiro  pokemón (Pikachu)
-      expect(getPokemonNameByTestId()).toHaveTextContent('Pikachu');
+      expect(await findPokemonNameByTestId()).toHaveTextContent('Pikachu');
       expect(getPokemonTypeByTestId()).toHaveTextContent('Electric');
       expect(getPokemonWeightByTestId()).toHaveTextContent('Average weight: 6.0 kg');
     });
     test('5) deve ser mostrado apenas um pokémon por vez.', async () => {
       // a plicação carrega apenas uma imagem para cada pokemón carregado,
-      // isso significa que para cada click no botão de ser rederizada na tela apenas UM sprite de pokemon por vez'
+      // isso significa que para cada click no botão deve ser rederizada na tela apenas UM sprite de pokemon por vez'
       const firstSpritesOnScreen = screen.getAllByAltText(/sprite/i);
       expect(firstSpritesOnScreen).toHaveLength(1);
       userEvent.click(getButtonNext());
@@ -77,14 +78,24 @@ describe('#Pokedex', () => {
     });
   });
   describe('Testes para os botões que filtram os pokemóns da Pokédex pelo tipo.', () => {
-    test.todo('deve existir um botão de filtragem para cada tipo de pokémon, sem repetição');
-    test.todo('a partir da seleção de um botão de tipo, a Pokédex deve circular somente pelos pokémons daquele tipo.');
-    test.todo('o texto do botão deve corresponder ao nome do tipo, ex. Psychic.');
-    test.todo('o botão All precisa estar sempre visível.');
+    test('6) deve existir um botão de filtragem para cada tipo de pokémon, sem repetição', () => {
+      const typePokemonsButtons = screen.getAllByTestId('pokemon-type-button');
+      expect(typePokemonsButtons).toHaveLength(7);
+      expect(typePokemonsButtons[0]).toHaveTextContent('Electric');
+      expect(typePokemonsButtons[1]).toHaveTextContent('Fire');
+      expect(typePokemonsButtons[2]).toHaveTextContent('Bug');
+      expect(typePokemonsButtons[3]).toHaveTextContent('Poison');
+      expect(typePokemonsButtons[4]).toHaveTextContent('Psychic');
+      expect(typePokemonsButtons[5]).toHaveTextContent('Normal');
+      expect(typePokemonsButtons[6]).toHaveTextContent('Dragon');
+    });
+    test.todo('7) a partir da seleção de um botão de tipo, a Pokédex deve circular somente pelos pokémons daquele tipo.');
+    test.todo('8) o texto do botão deve corresponder ao nome do tipo, ex. Psychic.');
+    test.todo('9) o botão All precisa estar sempre visível.');
   });
   describe('Teste se a Pokédex contém um botão para resetar o filtro', () => {
-    test.todo('o texto do botão deve ser All.');
-    test.todo('a Pokedéx deverá mostrar os pokémons normalmente (sem filtros) quando o botão All for clicado.');
-    test.todo('ao carregar a página, o filtro selecionado deverá ser All.');
+    test.todo('10) o texto do botão deve ser All.');
+    test.todo('11) a Pokedéx deverá mostrar os pokémons normalmente (sem filtros) quando o botão All for clicado.');
+    test.todo('12) ao carregar a página, o filtro selecionado deverá ser All.');
   });
 });
