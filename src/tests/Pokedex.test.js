@@ -4,13 +4,11 @@ import renderWithRouter from '../renderWithRouter';
 import App from '../App';
 
 // para não ficar repetindo sempre os mesmos metchers do RTL eu resolví refatorar esse código assim.
-const getPokemonNameByTestId = () => screen.getByTestId('pokemon-name');
-const getPokemonTypeByTestId = () => screen.getByTestId('pokemon-type');
-const getPokemonWeightByTestId = () => screen.getByTestId('pokemon-weight');
-const getButtonNext = () => screen.getByTestId('next-pokemon');
-const findPokemonNameByTestId = async () => screen.findByTestId('pokemon-name');
-// const findPokemonTypeByTestId = async () => screen.findByTestId('pokemon-type');
-
+const pokemon_type_button = 'pokemon-type-button';
+const pokemon_name = 'pokemon-name';
+const pokemon_type = 'pokemon-type';
+const pokemon_weight = 'pokemon-weight';
+const next_pokemon = 'next-pokemon';
 describe('#Pokedex', () => {
   beforeEach(() => {
     renderWithRouter(<App />);
@@ -22,7 +20,7 @@ describe('#Pokedex', () => {
       expect(headingPokedex).toBeVisible();
     });
     test('2) a página deve conter o texto "Próximo pokémon".', () => {
-      const btnNextPokemon = getButtonNext();
+      const btnNextPokemon = screen.getByTestId(next_pokemon);
       expect(btnNextPokemon).toHaveTextContent('Próximo pokémon');
       expect(btnNextPokemon).toBeVisible();
     });
@@ -31,14 +29,14 @@ describe('#Pokedex', () => {
   describe('Testes para a exibição dos pokémons da lista, quando o botão "Próximo pokémon" é clicado', () => {
     test('3) os próximos pokémons da lista devem ser mostrados, um a um, ao clicar sucessivamente no botão.', async () => {
       // primeiro pokemón
-      const firstPokemonName = getPokemonNameByTestId();
+      const firstPokemonName = screen.getByTestId(pokemon_name);
       expect(firstPokemonName).toHaveTextContent('Pikachu');
       expect(firstPokemonName).toBeVisible();
 
-      userEvent.click(getButtonNext());
+      userEvent.click(screen.getByTestId(next_pokemon));
 
       // segundo pokémon
-      const secondPokemonName = await findPokemonNameByTestId();
+      const secondPokemonName = await screen.findByTestId(pokemon_name);
       expect(secondPokemonName).toHaveTextContent('Charmander');
       expect(secondPokemonName).toBeVisible();
 
@@ -47,32 +45,32 @@ describe('#Pokedex', () => {
     });
     test('4) o primeiro pokémon da lista deve ser mostrado ao clicar no botão, se estiver no último pokémon da lista.', async () => {
       // verificando qual é o primeiro pokemón (Pikachu)
-      expect(getPokemonNameByTestId()).toHaveTextContent('Pikachu');
-      expect(getPokemonTypeByTestId()).toHaveTextContent('Electric');
-      expect(getPokemonWeightByTestId()).toHaveTextContent('Average weight: 6.0 kg');
+      expect(screen.getByTestId(pokemon_name)).toHaveTextContent('Pikachu');
+      expect(screen.getByTestId(pokemon_type)).toHaveTextContent('Electric');
+      expect(screen.getByTestId(pokemon_weight)).toHaveTextContent('Average weight: 6.0 kg');
 
       // clicando até chegar no ultimo pokémon
-      userEvent.click(getButtonNext()); // 2 charmander
-      userEvent.click(getButtonNext()); // 3 Caterpie
-      userEvent.click(getButtonNext()); // 4 Ekans
-      userEvent.click(getButtonNext()); // 5 Alakazam
-      userEvent.click(getButtonNext()); // 6 Mew
-      userEvent.click(getButtonNext()); // 7 Rapidash
-      userEvent.click(getButtonNext()); // 8 Snorlax
-      userEvent.click(getButtonNext()); // 9 Dragonair
-      userEvent.click(getButtonNext()); // 1 pikachu
+      userEvent.click(screen.getByTestId(next_pokemon)); // 2 charmander
+      userEvent.click(screen.getByTestId(next_pokemon)); // 3 Caterpie
+      userEvent.click(screen.getByTestId(next_pokemon)); // 4 Ekans
+      userEvent.click(screen.getByTestId(next_pokemon)); // 5 Alakazam
+      userEvent.click(screen.getByTestId(next_pokemon)); // 6 Mew
+      userEvent.click(screen.getByTestId(next_pokemon)); // 7 Rapidash
+      userEvent.click(screen.getByTestId(next_pokemon)); // 8 Snorlax
+      userEvent.click(screen.getByTestId(next_pokemon)); // 9 Dragonair
+      userEvent.click(screen.getByTestId(next_pokemon)); // 1 pikachu
 
       // verificando se retorna ao primeiro  pokemón (Pikachu)
-      expect(await findPokemonNameByTestId()).toHaveTextContent('Pikachu');
-      expect(getPokemonTypeByTestId()).toHaveTextContent('Electric');
-      expect(getPokemonWeightByTestId()).toHaveTextContent('Average weight: 6.0 kg');
+      expect(await screen.findByTestId(pokemon_name)).toHaveTextContent('Pikachu');
+      expect(screen.getByTestId(pokemon_type)).toHaveTextContent('Electric');
+      expect(screen.getByTestId(pokemon_weight)).toHaveTextContent('Average weight: 6.0 kg');
     });
     test('5) deve ser mostrado apenas um pokémon por vez.', async () => {
       // a plicação carrega apenas uma imagem para cada pokemón carregado,
       // isso significa que para cada click no botão deve ser rederizada na tela apenas UM sprite de pokemon por vez'
       const firstSpritesOnScreen = screen.getAllByAltText(/sprite/i);
       expect(firstSpritesOnScreen).toHaveLength(1);
-      userEvent.click(getButtonNext());
+      userEvent.click(screen.getByTestId(next_pokemon));
 
       const secondSpritesOnScreen = await screen.findAllByAltText(/sprite/i);
       expect(secondSpritesOnScreen).toHaveLength(1);
@@ -95,16 +93,16 @@ describe('#Pokedex', () => {
       // são 7 botões ao todo. quado a aplicação inicia, a pokedex exibe todos os tipos de pokemons
       const typePokemonsButtons = screen.getAllByTestId('pokemon-type-button');
       typePokemonsButtons.forEach(async (button) => {
-        await findPokemonNameByTestId();
+        await screen.findByTestId(pokemon_name);
         userEvent.click(button);
         const curr = screen.queryByText('Próximo pokémon');
         const isDisable = !curr.disabled;
         if (isDisable) {
-          expect(getPokemonTypeByTestId()).toHaveTextContent(button.textContent);
-          userEvent.click(getButtonNext());
-          expect(getPokemonTypeByTestId()).toHaveTextContent(button.textContent);
+          expect(screen.getByTestId(pokemon_type)).toHaveTextContent(button.textContent);
+          userEvent.click(screen.getByTestId(pokemon_type));
+          expect(screen.getByTestId(pokemon_type)).toHaveTextContent(button.textContent);
         }
-        expect(getPokemonTypeByTestId()).toHaveTextContent(button.textContent);
+        expect(screen.getByTestId(pokemon_type)).toHaveTextContent(button.textContent);
       });
     });
     test('8) o texto do botão deve corresponder ao nome do tipo, ex. Psychic.', () => {
