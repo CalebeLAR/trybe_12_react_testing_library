@@ -1,4 +1,4 @@
-import { findByRole, findByTestId, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
@@ -127,7 +127,7 @@ describe('#Pokedex', () => {
       expect(screen.getByText('All')).toHaveTextContent('All');
       expect(screen.getByText('All')).toBeInTheDocument();
     });
-    test('11) a Pokedéx deverá mostrar os pokémons normalmente (sem filtros) quando o botão All for clicado.', async ()=>{
+    test('11) a Pokedéx deverá mostrar os pokémons normalmente (sem filtros) quando o botão All for clicado.', async () => {
       userEvent.click(screen.getByRole('button', { name: 'Psychic' }));
       expect(await screen.findByTestId(pokemonName)).toHaveTextContent('Alakazam');
       userEvent.click(screen.getByRole('button', { name: 'All' }));
