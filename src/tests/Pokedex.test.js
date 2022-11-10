@@ -1,17 +1,15 @@
-import { findByAltText, findByTestId, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
-import pokemons from '../data';
 
 // para não ficar repetindo sempre os mesmos metchers do RTL eu resolví refatorar esse código assim.
 const getPokemonNameByTestId = () => screen.getByTestId('pokemon-name');
 const getPokemonTypeByTestId = () => screen.getByTestId('pokemon-type');
 const getPokemonWeightByTestId = () => screen.getByTestId('pokemon-weight');
 const getButtonNext = () => screen.getByTestId('next-pokemon');
-const getButtonByType = (typePokemon) => screen.getByText('next-pokemon');
 const findPokemonNameByTestId = async () => screen.findByTestId('pokemon-name');
-const findPokemonTypeByTestId = async () => screen.findByTestId('pokemon-type');
+// const findPokemonTypeByTestId = async () => screen.findByTestId('pokemon-type');
 
 describe('#Pokedex', () => {
   beforeEach(() => {
@@ -29,6 +27,7 @@ describe('#Pokedex', () => {
       expect(btnNextPokemon).toBeVisible();
     });
   });
+
   describe('Testes para a exibição dos pokémons da lista, quando o botão "Próximo pokémon" é clicado', () => {
     test('3) os próximos pokémons da lista devem ser mostrados, um a um, ao clicar sucessivamente no botão.', async () => {
       // primeiro pokemón
@@ -79,6 +78,7 @@ describe('#Pokedex', () => {
       expect(secondSpritesOnScreen).toHaveLength(1);
     });
   });
+
   describe('Testes para os botões que filtram os pokemóns da Pokédex pelo tipo.', () => {
     test('6) deve existir um botão de filtragem para cada tipo de pokémon, sem repetição', () => {
       const typePokemonsButtons = screen.getAllByTestId('pokemon-type-button');
@@ -95,7 +95,7 @@ describe('#Pokedex', () => {
       // são 7 botões ao todo. quado a aplicação inicia, a pokedex exibe todos os tipos de pokemons
       const typePokemonsButtons = screen.getAllByTestId('pokemon-type-button');
       typePokemonsButtons.forEach(async (button) => {
-        await screen.findByTestId('pokemon-name');
+        await findPokemonNameByTestId();
         userEvent.click(button);
         const curr = screen.queryByText('Próximo pokémon');
         const isDisable = !curr.disabled;
@@ -107,7 +107,15 @@ describe('#Pokedex', () => {
         expect(getPokemonTypeByTestId()).toHaveTextContent(button.textContent);
       });
     });
-    test.todo('8) o texto do botão deve corresponder ao nome do tipo, ex. Psychic.');
+    test('8) o texto do botão deve corresponder ao nome do tipo, ex. Psychic.', () => {
+      const typeButtons = screen.getAllByTestId('pokemon-type-button');
+      const types = typeButtons.map((btn) => btn.textContent);
+      typeButtons.forEach((button) => {
+        const currentTextButton = button.textContent;
+        const typecurrentTextButton = types[types.indexOf(currentTextButton)];
+        expect(currentTextButton).toBe(typecurrentTextButton);
+      });
+    });
     test.todo('9) o botão All precisa estar sempre visível.');
   });
   describe('Teste se a Pokédex contém um botão para resetar o filtro', () => {
