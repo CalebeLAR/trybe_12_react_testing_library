@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { findByRole, findByTestId, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
@@ -123,7 +123,10 @@ describe('#Pokedex', () => {
     });
   });
   describe('Teste se a Pokédex contém um botão para resetar o filtro', () => {
-    test.todo('10) o texto do botão deve ser All.');
+    test('10) o texto do botão deve ser All.', async () => {
+      expect(screen.getByText('All')).toHaveTextContent('All');
+      expect(screen.getByText('All')).toBeVisible();
+    });
     test.todo('11) a Pokedéx deverá mostrar os pokémons normalmente (sem filtros) quando o botão All for clicado.');
     test.todo('12) ao carregar a página, o filtro selecionado deverá ser All.');
   });
