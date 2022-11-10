@@ -90,7 +90,7 @@ describe('#Pokedex', () => {
       expect(typePokemonsButtons[5]).toHaveTextContent('Normal');
       expect(typePokemonsButtons[6]).toHaveTextContent('Dragon');
     });
-    test('7) a partir da seleção de um botão de tipo, a Pokédex deve circular somente pelos pokémons daquele tipo.', async () => {
+    test('7) a partir da seleção de um botão de tipo, a Pokédex deve circular somente pelos pokémons daquele tipo, e o botão All precisa estar sempre visível.', async () => {
       // são 7 botões ao todo. quado a aplicação inicia, a pokedex exibe todos os tipos de pokemons
       const typePokemonsButtons = screen.getAllByTestId(pokemonTypeButton);
       typePokemonsButtons.forEach(async (button) => {
@@ -125,9 +125,17 @@ describe('#Pokedex', () => {
   describe('Teste se a Pokédex contém um botão para resetar o filtro', () => {
     test('10) o texto do botão deve ser All.', async () => {
       expect(screen.getByText('All')).toHaveTextContent('All');
-      expect(screen.getByText('All')).toBeVisible();
+      expect(screen.getByText('All')).toBeInTheDocument();
     });
-    test.todo('11) a Pokedéx deverá mostrar os pokémons normalmente (sem filtros) quando o botão All for clicado.');
-    test.todo('12) ao carregar a página, o filtro selecionado deverá ser All.');
+    test('11) a Pokedéx deverá mostrar os pokémons normalmente (sem filtros) quando o botão All for clicado.', async ()=>{
+      userEvent.click(screen.getByRole('button', { name: 'Psychic' }));
+      expect(await screen.findByTestId(pokemonName)).toHaveTextContent('Alakazam');
+      userEvent.click(screen.getByRole('button', { name: 'All' }));
+      expect(await screen.findByTestId(pokemonName)).toHaveTextContent('Pikachu');
+    });
+    test('12) ao carregar a página, o filtro selecionado deverá ser All.', () => {
+      expect(screen.getByText('All')).toHaveTextContent('All');
+      expect(screen.getByText('All')).toBeInTheDocument();
+    });
   });
 });
