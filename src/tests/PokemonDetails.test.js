@@ -1,32 +1,27 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
+import pokemons from '../data';
 import App from '../App';
 
 // const pokemonTypeButton = 'pokemon-type-button';
 const pokemonName = 'pokemon-name';
 const pokemonType = 'pokemon-type';
 const pokemonWeight = 'pokemon-weight';
-const moreDetais = 'More details';
+const moreDetails = 'More details';
 // const nextPokemon = 'next-pokemon';
 
 describe('#PokemonDetails.js', () => {
   beforeEach(async () => {
     renderWithRouter(<App />);
-    // Favoritanda o pikachu e entra na pagina de detalhes dele, em todos os testes.
-    userEvent.click(screen.getByText('More details'));
-    // await screen.findByText('Pikachu Details');
-    // userEvent.click(screen.getByLabelText('Pokémon favoritado?'));
-    // userEvent.click(await screen.findByLabelText('Pokémon favoritado?'));
-    // userEvent.click(await screen.findByText('Home'));
-    // userEvent.click(await screen.findByText('More details'));
+    userEvent.click(screen.getByText(moreDetails));
   });
   describe('Testes sobre a rederização das informações do pokémon selecionado na tela', () => {
     test('(1) A página deve conter um texto <name> Details, onde <name> é o nome do pokémon;', () => {
       expect(screen.getByRole('heading', { name: 'Pikachu Details' })).toBeVisible();
     });
     test('(2) Não deve existir o link de navegação para os detalhes do pokémon selecionado', () => {
-      const thereIsBtnDetails = screen.queryByRole('link', { name: moreDetais });
+      const thereIsBtnDetails = screen.queryByRole('link', { name: moreDetails });
       expect(thereIsBtnDetails).not.toBeInTheDocument();
     });
     test('(3) A seção de detalhes deve conter um heading h2 com o texto Summary', () => {
@@ -54,7 +49,9 @@ describe('#PokemonDetails.js', () => {
       const pokemonsLocations = screen.getByRole('heading', { name: 'Game Locations of Pikachu' });
       expect(pokemonsLocations).toBeVisible();
     });
-    test.todo('(6) Todas as localizações do pokémon devem ser mostradas na seção de detalhes');
+    test('(6) Todas as localizações do pokémon devem ser mostradas na seção de detalhes', () => {
+      
+    });
     test.todo('(7) A imagem da localização deve ter um atributo src com a URL da localização');
     test.todo('(8) A imagem da localização deve ter um atributo alt com o texto "<namePokémon> location"');
   });
