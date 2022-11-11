@@ -10,8 +10,18 @@ describe('#Pokemon', () => {
   describe('Testes referentes ao card com as informações do pokémon', () => {
     test('(1) o link de detalhes do pokemon deve redirecionamentar para a página de detalhes de pokémon', async () => {
       renderWithRouter(<App />);
-      const moreDetails = screen.getByText('More details');
       const pikachu = screen.getByText('Pikachu');
+      expect(pikachu).toBeVisible();
+
+      const pikachuType = screen.getByTestId('pokemon-type');
+      expect(pikachuType).toHaveTextContent('Electric');
+      expect(pikachuType).toBeVisible();
+
+      const pikachuImage = screen.getByAltText('Pikachu sprite');
+      expect(pikachuImage).toHaveAttribute('src', 'https://cdn2.bulbagarden.net/upload/b/b2/Spr_5b_025_m.png');
+      expect(pikachuImage).toBeVisible();
+
+      const moreDetails = screen.getByText('More details');
       expect(moreDetails).toHaveAttribute('href', '/pokemons/25');
       expect(moreDetails).toBeVisible();
     });
@@ -42,6 +52,5 @@ describe('#Pokemon', () => {
       expect(favoriteStar).toHaveAttribute('src', '/star-icon.svg');
       expect(favoriteStar).toBeVisible();
     });
-    test.todo('(4) a imagem deve ter o atributo alt igual a <pokemon> is marked as favorite, onde <pokemon> é o nome do pokémon exibido.');
   });
 });
