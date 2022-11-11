@@ -22,7 +22,10 @@ describe('#PokemonDetails.js', () => {
       const thereIsBtnDetails = screen.queryByRole('link', { name:'More details' });
       expect(thereIsBtnDetails).not.toBeInTheDocument();
     });
-    test.todo('(3) A seção de detalhes deve conter um heading h2 com o texto Summary');
+    test('(3) A seção de detalhes deve conter um heading h2 com o texto Summary', () => {
+      const summary = screen.getByRole('heading', { name: 'Summary' });
+      expect(summary).toBeVisible();
+    });
     test.todo('(4) A seção de detalhes deve conter um parágrafo com o resumo do pokémon específico sendo visualizado');
   });
   describe('Testes sobre a rederização dos mapas da localização do pokémon selecionado', () => {
