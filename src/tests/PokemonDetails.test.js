@@ -3,6 +3,13 @@ import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
 import App from '../App';
 
+// const pokemonTypeButton = 'pokemon-type-button';
+const pokemonName = 'pokemon-name';
+const pokemonType = 'pokemon-type';
+const pokemonWeight = 'pokemon-weight';
+const moreDetais = 'More details';
+// const nextPokemon = 'next-pokemon';
+
 describe('#PokemonDetails.js', () => {
   beforeEach(async () => {
     renderWithRouter(<App />);
@@ -19,14 +26,28 @@ describe('#PokemonDetails.js', () => {
       expect(screen.getByRole('heading', { name: 'Pikachu Details' })).toBeVisible();
     });
     test('(2) Não deve existir o link de navegação para os detalhes do pokémon selecionado', () => {
-      const thereIsBtnDetails = screen.queryByRole('link', { name:'More details' });
+      const thereIsBtnDetails = screen.queryByRole('link', { name: moreDetais });
       expect(thereIsBtnDetails).not.toBeInTheDocument();
     });
     test('(3) A seção de detalhes deve conter um heading h2 com o texto Summary', () => {
       const summary = screen.getByRole('heading', { name: 'Summary' });
       expect(summary).toBeVisible();
     });
-    test.todo('(4) A seção de detalhes deve conter um parágrafo com o resumo do pokémon específico sendo visualizado');
+    test('(4) A seção de detalhes deve conter um parágrafo com o resumo do pokémon específico sendo visualizado', () => {
+      // faz o expect do parágrafo do nome
+      expect(screen.getByTestId(pokemonName)).toHaveTextContent('Pikachu');
+      expect(screen.getByTestId(pokemonName)).toBeVisible();
+      // faz o expect do parágrafo do tipo
+      expect(screen.getByTestId(pokemonType)).toHaveTextContent('Electric');
+      expect(screen.getByTestId(pokemonType)).toBeVisible();
+      // faz o expect do parágrafo do weight
+      expect(screen.getByTestId(pokemonWeight)).toHaveTextContent('Average weight: 6.0 kg');
+      expect(screen.getByTestId(pokemonWeight)).toBeVisible();
+      // faz o expect da imagem do pokémon
+      const pikachuSprite = screen.getByAltText('Pikachu sprite');
+      expect(pikachuSprite).toHaveAttribute('src', 'https://cdn2.bulbagarden.net/upload/b/b2/Spr_5b_025_m.png');
+      expect(pikachuSprite).toBeVisible();
+    });
   });
   describe('Testes sobre a rederização dos mapas da localização do pokémon selecionado', () => {
     test.todo('(5) Aa seção de mapas do pokemon deve conte um heading com o texto "Game Locations of <pokémon>"');
