@@ -7,7 +7,7 @@ describe('#PokemonDetails.js', () => {
   beforeEach(async () => {
     renderWithRouter(<App />);
     // Favoritanda o pikachu e entra na pagina de detalhes dele, em todos os testes.
-    // userEvent.click(screen.getByText('More details'));
+    userEvent.click(screen.getByText('More details'));
     // await screen.findByText('Pikachu Details');
     // userEvent.click(screen.getByLabelText('Pokémon favoritado?'));
     // userEvent.click(await screen.findByLabelText('Pokémon favoritado?'));
@@ -16,10 +16,12 @@ describe('#PokemonDetails.js', () => {
   });
   describe('Testes sobre a rederização das informações do pokémon selecionado na tela', () => {
     test('(1) A página deve conter um texto <name> Details, onde <name> é o nome do pokémon;', () => {
-      userEvent.click(screen.getByText('More details'));
       expect(screen.getByRole('heading', { name: 'Pikachu Details' })).toBeVisible();
     });
-    test.todo('(2) Não deve existir o link de navegação para os detalhes do pokémon selecionado');
+    test('(2) Não deve existir o link de navegação para os detalhes do pokémon selecionado', () => {
+      const thereIsBtnDetails = screen.queryByRole('link', { name:'More details' });
+      expect(thereIsBtnDetails).not.toBeInTheDocument();
+    });
     test.todo('(3) A seção de detalhes deve conter um heading h2 com o texto Summary');
     test.todo('(4) A seção de detalhes deve conter um parágrafo com o resumo do pokémon específico sendo visualizado');
   });
