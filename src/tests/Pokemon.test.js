@@ -4,9 +4,7 @@ import renderWithRouter from '../renderWithRouter';
 import App from '../App';
 
 describe('#Pokemon', () => {
-  // beforeEach(() => {
-  //   renderWithRouter(<App />);
-  // });
+  const MoreDetails = 'More details';
   describe('Testes referentes ao card com as informações do pokémon', () => {
     test('(1) o link de detalhes do pokemon deve redirecionamentar para a página de detalhes de pokémon', async () => {
       renderWithRouter(<App />);
@@ -21,16 +19,16 @@ describe('#Pokemon', () => {
       expect(pikachuImage).toHaveAttribute('src', 'https://cdn2.bulbagarden.net/upload/b/b2/Spr_5b_025_m.png');
       expect(pikachuImage).toBeVisible();
 
-      const moreDetails = screen.getByText('More details');
-      expect(moreDetails).toHaveAttribute('href', '/pokemons/25');
-      expect(moreDetails).toBeVisible();
+      const linkDetails = screen.getByText(MoreDetails);
+      expect(linkDetails).toHaveAttribute('href', '/pokemons/25');
+      expect(linkDetails).toBeVisible();
     });
     test('(2) a página de detalhes deve ter um URL com a configuração /pokemon/<id do pokemon>', async () => {
       const { history } = renderWithRouter(<App />);
-      const moreDetails = screen.getByText('More details');
-      const pikachu = screen.getByText('Pikachu');
+      expect(screen.getByText('Pikachu')).toBeVisible();
 
-      userEvent.click(moreDetails);
+      const linkDetails = screen.getByText(MoreDetails);
+      userEvent.click(linkDetails);
 
       await screen.findByText('Pikachu Details');
       expect(history.location.pathname).toBe('/pokemons/25');
@@ -41,7 +39,7 @@ describe('#Pokemon', () => {
       renderWithRouter(<App />);
 
       // entrar na páginade detalhes
-      userEvent.click(screen.getByText('More details'));
+      userEvent.click(screen.getByText(MoreDetails));
       await screen.findByText('Pikachu Details');
 
       // clicar no checkBox para favoritar
