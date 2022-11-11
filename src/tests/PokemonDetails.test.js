@@ -67,7 +67,27 @@ describe('#PokemonDetails.js\n', () => {
       const numImages = locationImages.length;
       expect(numImages).toBe(numberOfLocations);
     });
-    test('(7) A imagem da localização deve ter um atributo src com a URL da localização');
+    test('(7) A imagem da localização deve ter um atributo src com a URL da localização', () => {
+      renderWithRouter(<App />);
+      userEvent.click(screen.getByText('Próximo pokémon')); // Charmander
+      userEvent.click(screen.getByText(moreDetailsId));
+
+      // pegando quantos locais o pokemons DEVE ter.
+      const pokemonName = screen.getByTestId(pokemonNameId).textContent;
+      const pokemon = pokemons.find((pok) => (pok.name === pokemonName));
+      const listLocations = pokemon.foundAt;
+      const srcList = listLocations.map((location)=> location.map);
+
+      // pegando todas as imagens que estão sendo renderizadas na tela;
+      const locationImages = screen.getAllByAltText(/location/i);
+
+      // verificando se está sendo renderizada uma imagem para cada localização que o pokémon deve ter.
+      locationImages.forEach((locationImage) => {
+        const i = srcList.indexOf(locationImage.src);
+        expect(i).not.toBe(undefined);
+        expect(locationImage).toHaveAttribute('src', srcList[i]);
+      });
+    });
     test.todo('(8) A imagem da localização deve ter um atributo alt com o texto "<namePokémon> location"');
   });
   describe('Testes sobre a funcionalidade de favoritar o pokémon selecionado atravéz da página de detalhes\n', () => {
