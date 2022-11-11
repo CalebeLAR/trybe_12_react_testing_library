@@ -50,7 +50,10 @@ describe('#PokemonDetails.js', () => {
     });
   });
   describe('Testes sobre a rederização dos mapas da localização do pokémon selecionado', () => {
-    test.todo('(5) Aa seção de mapas do pokemon deve conte um heading com o texto "Game Locations of <pokémon>"');
+    test('(5) Aa seção de mapas do pokemon deve conte um heading com o texto "Game Locations of <pokémon>"', () => {
+      const pokemonsLocations = screen.getByRole('heading', { name: 'Game Locations of Pikachu' });
+      expect(pokemonsLocations).toBeVisible();
+    });
     test.todo('(6) Todas as localizações do pokémon devem ser mostradas na seção de detalhes');
     test.todo('(7) A imagem da localização deve ter um atributo src com a URL da localização');
     test.todo('(8) A imagem da localização deve ter um atributo alt com o texto "<namePokémon> location"');
