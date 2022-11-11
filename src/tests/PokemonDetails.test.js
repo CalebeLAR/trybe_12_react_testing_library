@@ -9,6 +9,7 @@ const pokemonNameId = 'pokemon-name';
 const pokemonTypeId = 'pokemon-type';
 const pokemonWeightId = 'pokemon-weight';
 const moreDetailsId = 'More details';
+const próximoPokémon = 'Próximo pokémon';
 // const nextPokemon = 'next-pokemon';
 
 describe('#PokemonDetails.js\n', () => {
@@ -54,8 +55,8 @@ describe('#PokemonDetails.js\n', () => {
     });
     test('(6) Todas as localizações do pokémon devem ser mostradas na seção de detalhes', () => {
       renderWithRouter(<App />);
-      userEvent.click(screen.getByText('Próximo pokémon')); // Charmander
-      userEvent.click(screen.getByText('Próximo pokémon')); // Caterpie
+      userEvent.click(screen.getByText(próximoPokémon)); // Charmander
+      userEvent.click(screen.getByText(próximoPokémon)); // Caterpie
       userEvent.click(screen.getByText(moreDetailsId));
 
       const pokemonName = screen.getByTestId(pokemonNameId).textContent;
@@ -69,26 +70,48 @@ describe('#PokemonDetails.js\n', () => {
     });
     test('(7) A imagem da localização deve ter um atributo src com a URL da localização', () => {
       renderWithRouter(<App />);
-      userEvent.click(screen.getByText('Próximo pokémon')); // Charmander
+      userEvent.click(screen.getByText(próximoPokémon)); // Charmander
       userEvent.click(screen.getByText(moreDetailsId));
 
       // pegando quantos locais o pokemons DEVE ter.
       const pokemonName = screen.getByTestId(pokemonNameId).textContent;
       const pokemon = pokemons.find((pok) => (pok.name === pokemonName));
       const listLocations = pokemon.foundAt;
-      const srcList = listLocations.map((location)=> location.map);
+      const srcList = listLocations.map((location) => location.map);
 
       // pegando todas as imagens que estão sendo renderizadas na tela;
       const locationImages = screen.getAllByAltText(/location/i);
 
-      // verificando se está sendo renderizada uma imagem para cada localização que o pokémon deve ter.
+      // verificando se está sendo renderizada uma imagem, com o SRC certo,
+      // para cada localização que o pokémon deve ter.
       locationImages.forEach((locationImage) => {
         const i = srcList.indexOf(locationImage.src);
         expect(i).not.toBe(undefined);
         expect(locationImage).toHaveAttribute('src', srcList[i]);
       });
     });
-    test.todo('(8) A imagem da localização deve ter um atributo alt com o texto "<namePokémon> location"');
+    test('(8) A imagem da localização deve ter um atributo alt com o texto "<namePokémon> location"', () => {
+      renderWithRouter(<App />);
+      userEvent.click(screen.getByText(próximoPokémon)); // Charmander
+      userEvent.click(screen.getByText(moreDetailsId));
+
+      // pegando quantos locais o pokemons DEVE ter.
+      const pokemonName = screen.getByTestId(pokemonNameId).textContent;
+      const pokemon = pokemons.find((pok) => (pok.name === pokemonName));
+      const listLocations = pokemon.foundAt;
+      const altList = listLocations.map((location) => location.location);
+
+      // pegando todas as imagens que estão sendo renderizadas na tela;
+      const locationImages = screen.getAllByAltText(/location/i);
+
+      // verificando se está sendo renderizada uma imagem,
+      // com o ALT certo, para cada localização que o pokémon deve ter.
+      locationImages.forEach((locationImage) => {
+        const i = altList.indexOf(locationImage.alt);
+        expect(i).not.toBe(undefined);
+        expect(locationImage).toHaveAttribute('alt', altList[i]);
+      });
+    });
   });
   describe('Testes sobre a funcionalidade de favoritar o pokémon selecionado atravéz da página de detalhes\n', () => {
     test.todo('(9) A página deve exibir um checkbox que permite favoritar o pokémon');
