@@ -6,16 +6,17 @@ import App from '../App';
 describe('#PokemonDetails.js', () => {
   beforeEach(async () => {
     renderWithRouter(<App />);
-    // Favoritando o Pikachu em todos os testes
-    userEvent.click(screen.getByText('More details'));
-    await screen.findByText('Pikachu Details');
-    userEvent.click(screen.getByLabelText('Pokémon favoritado?'));
-    userEvent.click(await screen.findByLabelText('Pokémon favoritado?'));
-    userEvent.click(await screen.findByText('Home'));
-    userEvent.click(await screen.findByText('More details'));
+    // Favoritanda o pikachu e entra na pagina de detalhes dele, em todos os testes.
+    // userEvent.click(screen.getByText('More details'));
+    // await screen.findByText('Pikachu Details');
+    // userEvent.click(screen.getByLabelText('Pokémon favoritado?'));
+    // userEvent.click(await screen.findByLabelText('Pokémon favoritado?'));
+    // userEvent.click(await screen.findByText('Home'));
+    // userEvent.click(await screen.findByText('More details'));
   });
   describe('Testes sobre a rederização das informações do pokémon selecionado na tela', () => {
     test('(1) A página deve conter um texto <name> Details, onde <name> é o nome do pokémon;', () => {
+      userEvent.click(screen.getByText('More details'));
       expect(screen.getByRole('heading', { name: 'Pikachu Details' })).toBeVisible();
     });
     test.todo('(2) Não deve existir o link de navegação para os detalhes do pokémon selecionado');
