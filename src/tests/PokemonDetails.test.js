@@ -80,13 +80,19 @@ describe('\n#PokemonDetails.js', () => {
       const pokemonName = screen.getByTestId(pokemonNameId).textContent;
       const pokemon = pokemons.find((pok) => (pok.name === pokemonName));
       const listLocations = pokemon.foundAt;
-      const srcList = listLocations.map((location) => location.map);
+      const srcList = listLocations.map((location) => location.map).filter((map) => map !== '');
 
       // pegando todas as imagens que estão sendo renderizadas na tela;
       const locationImages = screen.getAllByAltText(/location/i);
 
+      // conferindo se as imagens da tela, realmente tem um src de imagem válido
+      locationImages.forEach((locatiomImage) => {
+        expect(locatiomImage.src).toContain('https://');
+      });
+
       // verificando se está sendo renderizada uma imagem, com o SRC certo,
       // para cada localização que o pokémon deve ter.
+      expect(locationImages.length).toBe(srcList.length);
       locationImages.forEach((locationImage) => {
         const i = srcList.indexOf(locationImage.src);
         expect(i).not.toBe(undefined);
