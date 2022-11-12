@@ -156,5 +156,25 @@ describe('\n#PokemonDetails.js', () => {
       // userEvent.click(screen.getByLabelText('Pokémon favoritado?'));
       // expect(screen.getByLabelText('Pokémon favoritado?')).toBeChecked();
     });
+    test('(11) para cada imagem de local do pokémon, deve ter um parágrafo com seu respequitivo nome.', async () => {
+      renderWithRouter(<App />);
+      userEvent.click(screen.getByText(próximoPokémon)); // Charmander
+      userEvent.click(screen.getByText(próximoPokémon)); // Caterpie
+      userEvent.click(screen.getByText(próximoPokémon)); // Ekans
+      userEvent.click(screen.getByText(moreDetailsId));
+
+      const pokemonName = screen.getByTestId(pokemonNameId).textContent; // Ekans
+
+      // pega quantos locais o pokemons DEVE ter.
+      const pokemon = pokemons.find((pok) => (pok.name === pokemonName));
+      const listLocations = pokemon.foundAt;
+      const namesLocations = listLocations.map((location) => location.location);
+
+      // verifica se pra cala localização existe uma tag <em> com o texto da localização na tela.
+      namesLocations.forEach((nameLocation) => {
+        const tagEM = screen.getByText(nameLocation);
+        expect(tagEM).toBeVisible();
+      });
+    });
   });
 });
