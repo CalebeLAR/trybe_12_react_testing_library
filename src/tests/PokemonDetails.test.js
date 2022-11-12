@@ -1,17 +1,16 @@
-import { getByText, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
 import renderWithRouter from '../renderWithRouter';
 import pokemons from '../data';
 import App from '../App';
-import { act } from 'react-dom/test-utils';
 
-// const pokemonTypeButton = 'pokemon-type-button';
 const pokemonNameId = 'pokemon-name';
 const pokemonTypeId = 'pokemon-type';
 const pokemonWeightId = 'pokemon-weight';
 const moreDetailsId = 'More details';
 const próximoPokémon = 'Próximo pokémon';
-// const nextPokemon = 'next-pokemon';
+const pokemonFavoritadoText = 'Pokémon favoritado?';
 
 describe('\n#PokemonDetails.js', () => {
   describe('\nTestes sobre a rederização das informações do pokémon selecionado na tela', () => {
@@ -118,7 +117,7 @@ describe('\n#PokemonDetails.js', () => {
       userEvent.click(screen.getByText(próximoPokémon)); // Charmander
       userEvent.click(screen.getByText(moreDetailsId));
 
-      const checkBox = screen.getByLabelText('Pokémon favoritado?');
+      const checkBox = screen.getByLabelText(pokemonFavoritadoText);
       expect(checkBox).toBeVisible();
     });
     test('(10) Cliques alternados no checkbox devem adicionar e remover respectivamente o pokémon da lista de favoritos', async () => {
@@ -128,17 +127,17 @@ describe('\n#PokemonDetails.js', () => {
       });
 
       // acha o checkBox desfavoritado
-      expect(screen.getByLabelText('Pokémon favoritado?')).not.toBeChecked();
+      expect(screen.getByLabelText(pokemonFavoritadoText)).not.toBeChecked();
 
       // favorita o pokemon
-      userEvent.click(screen.getByLabelText('Pokémon favoritado?'));
-      expect(screen.getByLabelText('Pokémon favoritado?')).toBeChecked();
+      userEvent.click(screen.getByLabelText(pokemonFavoritadoText));
+      expect(screen.getByLabelText(pokemonFavoritadoText)).toBeChecked();
       const beforefavoriteStar = await screen.findByAltText(/marked as favorite/i);
       expect(beforefavoriteStar).toHaveAttribute('src', '/star-icon.svg');
       expect(beforefavoriteStar).toBeVisible();
 
-      userEvent.click(screen.getByLabelText('Pokémon favoritado?'));
-      expect(screen.getByLabelText('Pokémon favoritado?')).not.toBeChecked();
+      userEvent.click(screen.getByLabelText(pokemonFavoritadoText));
+      expect(screen.getByLabelText(pokemonFavoritadoText)).not.toBeChecked();
 
       const afterFavoriteStar = screen.queryByAltText(/marked as favorite/i);
       expect(afterFavoriteStar).toBe(null);
@@ -150,11 +149,11 @@ describe('\n#PokemonDetails.js', () => {
       // });
 
       // acha o checkBox desfavoritado
-      // expect(screen.getByLabelText('Pokémon favoritado?')).not.toBeChecked();
+      // expect(screen.getByLabelText(pokemonFavoritadoText)).not.toBeChecked();
 
       // // favorita o pokemon
-      // userEvent.click(screen.getByLabelText('Pokémon favoritado?'));
-      // expect(screen.getByLabelText('Pokémon favoritado?')).toBeChecked();
+      // userEvent.click(screen.getByLabelText(pokemonFavoritadoText));
+      // expect(screen.getByLabelText(pokemonFavoritadoText)).toBeChecked();
     });
     test('(11) para cada imagem de local do pokémon, deve ter um parágrafo com seu respequitivo nome.', async () => {
       renderWithRouter(<App />);
