@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
 import pokemons from '../data';
 import App from '../App';
+import { act } from 'react-dom/test-utils';
 
 // const pokemonTypeButton = 'pokemon-type-button';
 const pokemonNameId = 'pokemon-name';
@@ -122,7 +123,40 @@ describe('\n#PokemonDetails.js', () => {
       const checkBox = screen.getByLabelText('Pokémon favoritado?');
       expect(checkBox).toBeVisible();
     });
-    test.todo('(10) Cliques alternados no checkbox devem adicionar e remover respectivamente o pokémon da lista de favoritos');
-    test.todo('(11) O label do checkbox deve conter o texto "Pokémon favoritado?"');
+    test('(10) Cliques alternados no checkbox devem adicionar e remover respectivamente o pokémon da lista de favoritos', async () => {
+      const { history } = renderWithRouter(<App />);
+      act(() => {
+        history.push('/pokemons/4'); // Charmander details
+      });
+
+      // acha o checkBox desfavoritado
+      expect(screen.getByLabelText('Pokémon favoritado?')).not.toBeChecked();
+
+      // favorita o pokemon
+      userEvent.click(screen.getByLabelText('Pokémon favoritado?'));
+      expect(screen.getByLabelText('Pokémon favoritado?')).toBeChecked();
+      const beforefavoriteStar = await screen.findByAltText(/marked as favorite/i);
+      expect(beforefavoriteStar).toHaveAttribute('src', '/star-icon.svg');
+      expect(beforefavoriteStar).toBeVisible();
+
+      userEvent.click(screen.getByLabelText('Pokémon favoritado?'));
+      expect(screen.getByLabelText('Pokémon favoritado?')).not.toBeChecked();
+
+      const afterFavoriteStar = screen.queryByAltText(/marked as favorite/i);
+      expect(afterFavoriteStar).toBe(null);
+      expect(afterFavoriteStar).not.toBeInTheDocument();
+      // expect(favoriteStar).toBeVisible();
+
+      // act(() => {
+      //   history.push('/favorites'); // Caterpie details
+      // });
+
+      // acha o checkBox desfavoritado
+      // expect(screen.getByLabelText('Pokémon favoritado?')).not.toBeChecked();
+
+      // // favorita o pokemon
+      // userEvent.click(screen.getByLabelText('Pokémon favoritado?'));
+      // expect(screen.getByLabelText('Pokémon favoritado?')).toBeChecked();
+    });
   });
 });
