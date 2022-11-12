@@ -12,8 +12,8 @@ const moreDetailsId = 'More details';
 const próximoPokémon = 'Próximo pokémon';
 // const nextPokemon = 'next-pokemon';
 
-describe('#PokemonDetails.js\n', () => {
-  describe('Testes sobre a rederização das informações do pokémon selecionado na tela\n', () => {
+describe('\n#PokemonDetails.js', () => {
+  describe('\nTestes sobre a rederização das informações do pokémon selecionado na tela', () => {
     beforeEach(async () => {
       renderWithRouter(<App />);
       userEvent.click(screen.getByText(moreDetailsId));
@@ -45,7 +45,7 @@ describe('#PokemonDetails.js\n', () => {
       expect(pikachuSprite).toBeVisible();
     });
   });
-  describe('Testes sobre a rederização dos mapas da localização do pokémon selecionado\n', () => {
+  describe('\nTestes sobre a rederização dos mapas da localização do pokémon selecionado', () => {
     test('(5) Aa seção de mapas do pokemon deve conte um heading com o texto "Game Locations of <pokémon>"', () => {
       renderWithRouter(<App />);
       userEvent.click(screen.getByText(moreDetailsId));
@@ -113,8 +113,15 @@ describe('#PokemonDetails.js\n', () => {
       });
     });
   });
-  describe('Testes sobre a funcionalidade de favoritar o pokémon selecionado atravéz da página de detalhes\n', () => {
-    test.todo('(9) A página deve exibir um checkbox que permite favoritar o pokémon');
+  describe('\nTestes sobre a funcionalidade de favoritar o pokémon selecionado atravéz da página de detalhes', () => {
+    test('(9) A página deve exibir um checkbox que permite favoritar o pokémon', () => {
+      renderWithRouter(<App />);
+      userEvent.click(screen.getByText(próximoPokémon)); // Charmander
+      userEvent.click(screen.getByText(moreDetailsId));
+
+      const checkBox = screen.getByLabelText('Pokémon favoritado?');
+      expect(checkBox).toBeVisible();
+    });
     test.todo('(10) Cliques alternados no checkbox devem adicionar e remover respectivamente o pokémon da lista de favoritos');
     test.todo('(11) O label do checkbox deve conter o texto "Pokémon favoritado?"');
   });
