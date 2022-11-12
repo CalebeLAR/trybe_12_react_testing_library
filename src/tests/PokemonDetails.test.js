@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { getByText, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
 import pokemons from '../data';
@@ -31,6 +31,9 @@ describe('\n#PokemonDetails.js', () => {
       expect(summary).toBeVisible();
     });
     test('(4) A seção de detalhes deve conter um parágrafo com o resumo do pokémon específico sendo visualizado', () => {
+      // faz o expect da descrição do pokemon
+      const decription = screen.getByText(/with electricity to make them tender/i);
+      expect(decription).toBeVisible();
       // faz o expect do parágrafo do nome
       expect(screen.getByTestId(pokemonNameId)).toHaveTextContent('Pikachu');
       expect(screen.getByTestId(pokemonNameId)).toBeVisible();
@@ -98,9 +101,6 @@ describe('\n#PokemonDetails.js', () => {
 
       // pegando quantos locais o pokemons DEVE ter.
       const pokemonName = screen.getByTestId(pokemonNameId).textContent;
-      const pokemon = pokemons.find((pok) => (pok.name === pokemonName));
-      const listLocations = pokemon.foundAt;
-      const altList = listLocations.map((location) => location.location);
 
       // pegando todas as imagens que estão sendo renderizadas na tela;
       const locationImages = screen.getAllByAltText(/location/i);
@@ -108,9 +108,7 @@ describe('\n#PokemonDetails.js', () => {
       // verificando se está sendo renderizada uma imagem,
       // com o ALT certo, para cada localização que o pokémon deve ter.
       locationImages.forEach((locationImage) => {
-        const i = altList.indexOf(locationImage.alt);
-        expect(i).not.toBe(undefined);
-        expect(locationImage).toHaveAttribute('alt', altList[i]);
+        expect(locationImage).toHaveAttribute('alt', `${pokemonName} location`);
       });
     });
   });
