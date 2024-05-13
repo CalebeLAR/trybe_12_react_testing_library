@@ -28,6 +28,11 @@ A aplicação é uma implementação de uma Pokédex que permite visualizar e fi
 ```shell
     npm run test   
 ```
+
+Ter uma boa cobertura de testes não significa ter uma aplicação bem testada. Nesse exercício foi atingida uma cobertura de 100% da aplicação, o que uma otima conquista, mas só garante a qualidade da plicação porque os testes foram escritos integralmente para todas as funcionalidades da aplicação 
+
+para visualizar a cobertura dos testes rode o comando.
+
 ```shell
     npm run test-coverage # verifica a cobertura dos testes
 ```
