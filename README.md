@@ -45,7 +45,9 @@ Ter uma boa cobertura de testes não significa ter uma aplicação bem testada. 
 ```shell
     npm run test-coverage
 ```
-    O comando para ver a cobertura de testes gera automaticamente a pasta coverage na raiz do projeto, nela há um arquivo index.html localizado em lcov-report que apresenta melhor as informações exibidas no terminal após executar o comando.
+    O comando para ver a cobertura de testes gera automaticamente a pasta coverage
+    na raiz do projeto, nela há um arquivo index.html localizado em lcov-report que
+    apresenta melhor as informações exibidas no terminal após executar o comando.
 
 
 
