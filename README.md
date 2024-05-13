@@ -51,4 +51,4 @@ Ter uma boa cobertura de testes não significa ter uma aplicação bem testada. 
 
 
 
-_Quarto projeto desenvolvido no módulo de Front-End durante minha formação na escola de tecnologia da Trybe, que elaborou os requisitos do projeto e forneceu a aplicação para que fosse testada._
+> _Quarto projeto desenvolvido no módulo de Front-End durante minha formação na escola de tecnologia da Trybe, que elaborou os requisitos do projeto e forneceu a aplicação para que fosse testada._
