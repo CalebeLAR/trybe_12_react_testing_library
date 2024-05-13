@@ -40,11 +40,10 @@ Ter uma boa cobertura de testes não significa ter uma aplicação bem testada. 
 ```shell
     npm run test
 ```
-
-para visualizar a cobertura dos testes rode o comando.
-
+**5. Veja a cobertura dos testes integração**  
 ```shell
-    npm run test-coverage # verifica a cobertura dos testes
+    # O comando para ver a cobertura de testes gera automaticamente a pasta coverage na raiz do projeto, nela há um arquivo index.html localizado em lcov-report que apresenta melhor as informações exibidas no terminal após executar o comando.
+    npm run test-coverage
 ```
 
 _Quarto projeto desenvolvido no módulo de Front-End durante minha formação na escola de tecnologia da Trybe, que elaborou os requisitos do projeto e forneceu a aplicação para que fosse testada._
