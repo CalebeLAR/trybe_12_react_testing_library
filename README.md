@@ -1,4 +1,4 @@
-# Trybetunes
+# Project React Testing Library
 Esse projeto é um exercício de escrita de testes utilizando Jest e a biblioteca React Testing Library, para uma aplicação React. 
 
 A aplicação é uma implementação de uma Pokédex que permite visualizar e filtrar pokemons. O exercicio foi escrever testes que garantam o bom funcionamento dessa aplicação. Durante o desenvolvimento da aplicação eu pude colocar em pratica habilidades como:
