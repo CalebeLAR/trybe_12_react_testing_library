@@ -20,7 +20,7 @@ Ter uma boa cobertura de testes não significa ter uma aplicação bem testada. 
 **1. Clone o repositório**
 
 ```shell
-    git clone git@github.com:CalebeLAR/react-testing-library.git
+    git clone git@github.com:CalebeLAR/trybe_12_react_testing_library.git
 ```
 
 **2. Instale as dependências**
